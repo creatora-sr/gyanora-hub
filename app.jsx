@@ -279,7 +279,7 @@ export default function App() {
           href="https://wa.me/918171643770"
           target="_blank"
           rel="noopener noreferrer"
-          title="WhatsApp 8171643770"
+          title="WhatsApp"
           className="w-13 h-13 rounded-full bg-green-500 text-white flex items-center justify-center shadow-2xl hover:scale-110 transition-transform border border-green-300/40"
         >
           <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
@@ -288,7 +288,7 @@ export default function App() {
         </a>
         <a
           href="tel:8171643770"
-          title="Call 8171643770"
+          title="Call"
           className="w-13 h-13 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-black flex items-center justify-center shadow-2xl hover:scale-110 transition-transform border border-amber-300/40 group"
         >
           <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
@@ -297,7 +297,7 @@ export default function App() {
         </a>
         <a
           href="tel:9259680648"
-          title="Call 9259680648"
+          title="Call"
           className="w-13 h-13 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-black flex items-center justify-center shadow-2xl hover:scale-110 transition-transform border border-amber-300/40"
         >
           <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
@@ -707,8 +707,8 @@ export default function App() {
             <div className="flex flex-wrap justify-center items-center gap-6 mt-6">
               <a
                 href="tel:8171643770"
-                title="Call 8171643770"
-                aria-label="Call 8171643770"
+                title="Call"
+                aria-label="Call"
                 className="flex items-center space-x-3 bg-[#0B0F17] px-5 py-3 rounded-2xl border border-amber-500/40 hover:border-amber-400 text-amber-400 transition"
               >
                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -719,8 +719,8 @@ export default function App() {
 
               <a
                 href="https://wa.me/918171643770"
-                title="WhatsApp 8171643770"
-                aria-label="WhatsApp 8171643770"
+                title="WhatsApp"
+                aria-label="WhatsApp"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-3 bg-[#0B0F17] px-5 py-3 rounded-2xl border border-green-500/40 hover:border-green-400 text-green-400 transition"
@@ -733,8 +733,8 @@ export default function App() {
 
               <a
                 href="tel:9259680648"
-                title="Call 9259680648"
-                aria-label="Call 9259680648"
+                title="Call"
+                aria-label="Call"
                 className="flex items-center space-x-3 bg-[#0B0F17] px-5 py-3 rounded-2xl border border-amber-500/40 hover:border-amber-400 text-amber-400 transition"
               >
                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -745,8 +745,8 @@ export default function App() {
 
               <a
                 href="https://wa.me/919259680648"
-                title="WhatsApp 9259680648"
-                aria-label="WhatsApp 9259680648"
+                title="WhatsApp"
+                aria-label="WhatsApp"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-3 bg-[#0B0F17] px-5 py-3 rounded-2xl border border-green-500/40 hover:border-green-400 text-green-400 transition"
