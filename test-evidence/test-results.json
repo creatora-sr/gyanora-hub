@@ -1,0 +1,91 @@
+{
+  "ranAt": "2026-10-26T13:45:39.200Z",
+  "baseUrl": "http://localhost:8765/index.html",
+  "allPass": true,
+  "results": [
+    {
+      "id": "TC-01",
+      "name": "Page loads with correct title",
+      "pass": true,
+      "detail": "Gyanora Hub — ज्ञान से सफलता तक का सफर"
+    },
+    {
+      "id": "TC-02",
+      "name": "Favicon (site icon) linked to logo.jpeg",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "TC-03",
+      "name": "Animated particle background renders on canvas",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "TC-04",
+      "name": "Hero floating glow orbs present (2)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "TC-05",
+      "name": "Custom cursor (gold dot + ring) active and follows mouse",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "TC-06",
+      "name": "Sparkle trail particles spawn on mouse move",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "TC-07",
+      "name": "Cursor ring grows on link hover",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "TC-08",
+      "name": "Phone/Email/WhatsApp direct-open links all have icons",
+      "pass": true,
+      "detail": "{\"tel\":4,\"telIcon\":4,\"mail\":2,\"mailIcon\":2,\"wa\":4,\"waIcon\":4}"
+    },
+    {
+      "id": "TC-09",
+      "name": "Services tabs switch content (Web Dev tab)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "TC-10",
+      "name": "Mobile menu opens and closes",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "TC-11",
+      "name": "Contact form submits to Formspree (HTTP 200) + success message shows",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "TC-12",
+      "name": "Footer: every number/email has its own direct-open icon",
+      "pass": true,
+      "detail": "icons=5"
+    },
+    {
+      "id": "TC-13",
+      "name": "logoFallback() icon replacement function defined",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "TC-14",
+      "name": "No JavaScript console errors",
+      "pass": true,
+      "detail": "none"
+    }
+  ]
+}

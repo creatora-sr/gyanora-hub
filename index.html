@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="hi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gyanora Hub — ज्ञान से सफलता तक का सफर</title>
+    <!-- Site Icon (Favicon) -->
+    <link rel="icon" type="image/jpeg" href="logo.jpeg">
+    <link rel="apple-touch-icon" href="logo.jpeg">
+    <meta name="theme-color" content="#0B0F17">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0B0F17',
+                            card: '#151C2C',
+                            accent: '#F59E0B',
+                            gold: '#D97706',
+                            lightGold: '#FBBF24',
+                            blue: '#2563EB',
+                            lightBlue: '#60A5FA',
+                            text: '#E2E8F0',
+                            subtext: '#94A3B8'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'Noto Sans Devanagari', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-card {
+            background: rgba(21, 28, 44, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(245, 158, 11, 0.15);
+        }
+        .glass-card:hover {
+            border-color: rgba(245, 158, 11, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(245, 158, 11, 0.2);
+        }
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 50%, #D97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* ===== ANIMATED PARTICLE BACKGROUND ===== */
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ===== FLOATING GLOW ORBS (HERO) ===== */
+        .orb {
+            position: absolute;
+            border-radius: 9999px;
+            filter: blur(90px);
+            opacity: 0.28;
+            animation: orbFloat 14s ease-in-out infinite;
+        }
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33%      { transform: translate(40px, -50px) scale(1.15); }
+            66%      { transform: translate(-30px, 35px) scale(0.9); }
+        }
+
+        /* ===== CUSTOM CURSOR ANIMATION ===== */
+        html.custom-cursor,
+        html.custom-cursor * { cursor: none !important; }
+
+        .cursor-dot, .cursor-ring {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            border-radius: 9999px;
+            will-change: transform;
+        }
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background: #FBBF24;
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.9);
+        }
+        .cursor-ring {
+            width: 34px; height: 34px;
+            border: 1.5px solid rgba(245, 158, 11, 0.55);
+            transition: width 0.25s ease, height 0.25s ease,
+                        border-color 0.25s ease, background-color 0.25s ease,
+                        opacity 0.25s ease;
+        }
+        .cursor-ring.hovering {
+            width: 58px; height: 58px;
+            border-color: rgba(251, 191, 36, 0.95);
+            background: rgba(245, 158, 11, 0.08);
+        }
+        .cursor-dot.hidden-c, .cursor-ring.hidden-c { opacity: 0; }
+
+        .sparkle {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 9998;
+            border-radius: 9999px;
+        }
+
+        /* Respect users who prefer reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .orb { animation: none; }
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-brand-text font-sans antialiased selection:bg-brand-accent selection:text-black overflow-x-hidden">
+
+    <!-- ANIMATED PARTICLE BACKGROUND -->
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-card border-b border-gray-800 bg-brand-dark/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & Brand Name -->
+                <a href="#" class="flex items-center space-x-3 group">
+                    <img src="logo.jpeg" alt="Gyanora Hub Logo" class="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105" onerror="logoFallback(this, 'h-10 w-10 sm:h-12 sm:w-12 text-lg sm:text-xl')">
+                    <div class="flex flex-col">
+                        <span class="text-lg sm:text-xl font-bold tracking-wider gold-gradient-text">GYANORA HUB</span>
+                        <span class="text-[9px] sm:text-[10px] text-brand-subtext tracking-widest uppercase">ज्ञान से सफलता तक का सफर</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu Links -->
+                <div class="hidden lg:flex items-center space-x-6 text-sm font-medium">
+                    <a href="#about" class="hover:text-brand-accent transition">हमारे बारे में</a>
+                    <a href="#education" class="hover:text-brand-accent transition">ऑनलाइन कोर्सेज</a>
+                    <a href="#services" class="hover:text-brand-accent transition">सेवाएँ</a>
+                    <a href="#automation" class="hover:text-brand-accent transition">ऑटोमेशन</a>
+                    <a href="#growth" class="hover:text-brand-accent transition">डिजिटल ग्रोथ</a>
+                    <a href="#contact" class="btn-gold text-black font-semibold px-5 py-2.5 rounded-full text-sm">संपर्क करें</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-brand-text hover:text-brand-accent focus:outline-none p-2" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-brand-card border-b border-gray-800 px-6 pt-4 pb-6 space-y-3 shadow-xl">
+            <a href="#about" class="block py-2 text-brand-text hover:text-brand-accent border-b border-gray-800/50">हमारे बारे में</a>
+            <a href="#education" class="block py-2 text-brand-text hover:text-brand-accent border-b border-gray-800/50">ऑनलाइन कोर्सेज</a>
+            <a href="#services" class="block py-2 text-brand-text hover:text-brand-accent border-b border-gray-800/50">सेवाएँ (Services)</a>
+            <a href="#automation" class="block py-2 text-brand-text hover:text-brand-accent border-b border-gray-800/50">ऑटोमेशन</a>
+            <a href="#growth" class="block py-2 text-brand-text hover:text-brand-accent border-b border-gray-800/50">डिजिटल ग्रोथ</a>
+            <a href="#contact" class="block btn-gold text-black font-semibold text-center py-3 rounded-xl mt-4">संपर्क करें</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-32 pb-16 sm:pt-40 sm:pb-24 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(245,158,11,0.1),transparent_50%)]"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(37,99,235,0.1),transparent_50%)]"></div>
+        <!-- Floating glow orbs -->
+        <div class="orb w-72 h-72 bg-brand-accent -top-10 -left-24" aria-hidden="true"></div>
+        <div class="orb w-96 h-96 bg-brand-blue bottom-0 -right-28" style="animation-delay: -7s;" aria-hidden="true"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <!-- Large Display Logo -->
+            <div class="flex justify-center mb-6 sm:mb-8">
+                <div class="relative p-2 rounded-full bg-gradient-to-r from-brand-accent/20 to-brand-blue/20 backdrop-blur-md border border-brand-accent/30 shadow-2xl">
+                    <img src="logo.jpeg" alt="Gyanora Hub" class="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 object-contain rounded-full shadow-lg" onerror="logoFallback(this, 'w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 text-4xl sm:text-5xl')">
+                </div>
+            </div>
+
+            <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold bg-brand-accent/10 text-brand-accent border border-brand-accent/30 mb-6">
+                🚀 Education | AI | Web Dev | Automation | Digital Growth
+            </span>
+
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+                <span class="block text-white">आधुनिक तकनीक और AI से</span>
+                <span class="gold-gradient-text">अपने सपनों को दें नई उड़ान</span>
+            </h1>
+
+            <p class="max-w-3xl mx-auto text-base sm:text-lg md:text-xl text-brand-subtext mb-8 sm:mb-10 leading-relaxed px-2">
+                Gyanora Hub में हम विद्यार्थियों, युवाओं, शिक्षकों और व्यवसायों को व्यावहारिक कौशलों, AI टूल्स, वेब डेवलपमेंट और ऑटोमेशन से जोड़कर डिजिटल दुनिया में आगे बढ़ाते हैं।
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 px-4">
+                <a href="#services" class="w-full sm:w-auto btn-gold text-black font-bold px-8 py-4 rounded-full text-base shadow-lg text-center">
+                    हमारी सेवाएं देखें <i class="fa-solid fa-arrow-right ml-2"></i>
+                </a>
+                <a href="#education" class="w-full sm:w-auto bg-brand-card hover:bg-gray-800 text-brand-text font-semibold px-8 py-4 rounded-full text-base border border-gray-700 transition text-center">
+                    कोर्सेज एक्सप्लोर करें
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT US SECTION -->
+    <section id="about" class="py-16 sm:py-20 bg-brand-card/50 relative border-t border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+                <div>
+                    <span class="text-brand-accent font-semibold text-sm uppercase tracking-wider">01. हमारे बारे में (About Us)</span>
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mt-2 mb-4 sm:mb-6">ज्ञान से सफलता तक का एक मजबूत सफर</h2>
+                    <p class="text-brand-subtext leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
+                        Gyanora Hub एक एजुकेशन और डिजिटल सर्विस प्लेटफॉर्म है, जिसका उद्देश्य लोगों, विद्यार्थियों, शिक्षकों, छोटे-बड़े व्यवसायों और संस्थानों को आधुनिक तकनीक, आर्टिफिशियल इंटेलिजेंस (AI) और डिजिटल सेवाओं से जोड़ना है।
+                    </p>
+                    <p class="text-brand-subtext leading-relaxed mb-6 text-sm sm:text-base">
+                        हमारा उद्देश्य केवल डिजिटल जानकारी देना नहीं, बल्कि लोगों को व्यावहारिक कौशल सिखाना, उनके काम को आसान बनाना और उन्हें डिजिटल दुनिया में आगे बढ़ने के अवसर प्रदान करना है।
+                    </p>
+                    <div class="p-4 rounded-xl bg-brand-dark/80 border border-brand-accent/30 flex items-start space-x-4">
+                        <i class="fa-solid fa-bullseye text-brand-accent text-2xl mt-1 shrink-0"></i>
+                        <div>
+                            <h4 class="font-bold text-white text-sm sm:text-base">हमारा विजन (Our Vision)</h4>
+                            <p class="text-xs sm:text-sm text-brand-subtext mt-1">सीखने से लेकर डिजिटल निर्माण और बिजनेस ग्रोथ तक, एक ही प्लेटफॉर्म पर उपयोगी समाधान उपलब्ध कराना।</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                    <div class="glass-card p-4 sm:p-6 rounded-2xl text-center">
+                        <i class="fa-solid fa-graduation-cap text-3xl sm:text-4xl text-brand-accent mb-3"></i>
+                        <h3 class="font-bold text-base sm:text-lg text-white">व्यावहारिक शिक्षा</h3>
+                        <p class="text-[11px] sm:text-xs text-brand-subtext mt-2">AI, कोडिंग और डिजिटल स्किल्स</p>
+                    </div>
+                    <div class="glass-card p-4 sm:p-6 rounded-2xl text-center">
+                        <i class="fa-solid fa-robot text-3xl sm:text-4xl text-brand-blue mb-3"></i>
+                        <h3 class="font-bold text-base sm:text-lg text-white">AI Solutions</h3>
+                        <p class="text-[11px] sm:text-xs text-brand-subtext mt-2">Chatbots और Automation Agents</p>
+                    </div>
+                    <div class="glass-card p-4 sm:p-6 rounded-2xl text-center">
+                        <i class="fa-solid fa-laptop-code text-3xl sm:text-4xl text-brand-blue mb-3"></i>
+                        <h3 class="font-bold text-base sm:text-lg text-white">Web Design</h3>
+                        <p class="text-[11px] sm:text-xs text-brand-subtext mt-2">प्रोफेशनल वेबसाइट्स</p>
+                    </div>
+                    <div class="glass-card p-4 sm:p-6 rounded-2xl text-center">
+                        <i class="fa-solid fa-chart-line text-3xl sm:text-4xl text-brand-accent mb-3"></i>
+                        <h3 class="font-bold text-base sm:text-lg text-white">Digital Growth</h3>
+                        <p class="text-[11px] sm:text-xs text-brand-subtext mt-2">मार्केटिंग और ब्रांड प्रमोशन</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EDUCATION & COURSES SECTION -->
+    <section id="education" class="py-16 sm:py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+                <span class="text-brand-accent font-semibold text-sm uppercase tracking-wider">02. Education & Online Courses</span>
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mt-2">शिक्षा एवं ऑनलाइन प्रशिक्षण</h2>
+                <p class="text-brand-subtext mt-3 sm:mt-4 text-sm sm:text-base">विद्यार्थियों, युवाओं, शिक्षकों और व्यवसायियों के लिए विकसित तकनीकी शिक्षा एवं कौशल विकास कोर्स।</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Course 1 -->
+                <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent text-xl shrink-0">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-white">AI & Prompting Training</h3>
+                    </div>
+                    <ul class="text-sm text-brand-subtext space-y-2 mb-6">
+                        <li>• AI की बेसिक से एडवांस जानकारी</li>
+                        <li>• ChatGPT एवं Google Gemini का उपयोग</li>
+                        <li>• AI से कंटेंट और सोशल मीडिया पोस्ट</li>
+                    </ul>
+                    <span class="inline-block text-xs font-semibold px-3 py-1 bg-brand-blue/20 text-brand-lightBlue rounded-full">Available Soon</span>
+                </div>
+
+                <!-- Course 2 -->
+                <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue text-xl shrink-0">
+                            <i class="fa-solid fa-photo-film"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-white">AI Visuals & Media</h3>
+                    </div>
+                    <ul class="text-sm text-brand-subtext space-y-2 mb-6">
+                        <li>• AI से फोटो, ग्राफिक्स और पोस्टर बनाना</li>
+                        <li>• AI आधारित वीडियो और वॉइसओवर निर्माण</li>
+                        <li>• AI टूल्स से वेबसाइट बनाने की ट्रेनिंग</li>
+                    </ul>
+                    <span class="inline-block text-xs font-semibold px-3 py-1 bg-brand-blue/20 text-brand-lightBlue rounded-full">Upcoming</span>
+                </div>
+
+                <!-- Course 3 -->
+                <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent text-xl shrink-0">
+                            <i class="fa-solid fa-gears"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-white">No-Code & AI Agents</h3>
+                    </div>
+                    <ul class="text-sm text-brand-subtext space-y-2 mb-6">
+                        <li>• बिना अधिक कोडिंग के वेबसाइट और ऐप</li>
+                        <li>• Custom AI Agents बनाना और उपयोग</li>
+                        <li>• n8n Automation & Workflows ट्रेनिंग</li>
+                    </ul>
+                    <span class="inline-block text-xs font-semibold px-3 py-1 bg-brand-blue/20 text-brand-lightBlue rounded-full">Upcoming</span>
+                </div>
+
+                <!-- Course 4 -->
+                <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue text-xl shrink-0">
+                            <i class="fa-solid fa-magnifying-glass-chart"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-white">Digital Marketing & SEO</h3>
+                    </div>
+                    <ul class="text-sm text-brand-subtext space-y-2 mb-6">
+                        <li>• सर्च इंजन ऑप्टिमाइजेशन (SEO)</li>
+                        <li>• YouTube चैनल सेटअप और ग्रोथ</li>
+                        <li>• सोशल मीडिया हैंडलिंग और मैनेजमेंट</li>
+                    </ul>
+                    <span class="inline-block text-xs font-semibold px-3 py-1 bg-brand-accent/20 text-brand-accent rounded-full">Coming Soon</span>
+                </div>
+
+                <!-- Course 5 -->
+                <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent text-xl shrink-0">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-white">Online Business & Freelancing</h3>
+                    </div>
+                    <ul class="text-sm text-brand-subtext space-y-2 mb-6">
+                        <li>• डिजिटल बिजनेस शुरू करने की जानकारी</li>
+                        <li>• फ्रीलांसिंग एवं सर्विस बिजनेस ट्रेनिंग</li>
+                        <li>• क्लाइंट्स के साथ काम करने के तरीके</li>
+                    </ul>
+                    <span class="inline-block text-xs font-semibold px-3 py-1 bg-brand-accent/20 text-brand-accent rounded-full">Coming Soon</span>
+                </div>
+
+                <!-- Banner Card -->
+                <div class="glass-card p-6 rounded-2xl bg-gradient-to-br from-brand-card to-brand-dark border-brand-accent/30 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-xl text-white mb-2">व्यावहारिक कौशल सीखें</h3>
+                        <p class="text-xs text-brand-subtext">हमारा उद्देश्य आपको ऐसे स्किल सिखाना है जिनका उपयोग आप तुरंत कर सकें।</p>
+                    </div>
+                    <a href="#contact" class="mt-4 text-center btn-gold text-black text-xs font-bold py-2.5 px-4 rounded-lg">कोर्स enquiry करें</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES TABBED SECTION -->
+    <section id="services" class="py-16 sm:py-20 bg-brand-card/30 relative border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
+                <span class="text-brand-accent font-semibold text-sm uppercase tracking-wider">03. Professional Digital Services</span>
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mt-2">हमारी प्रमुख डिजिटल सेवाएँ</h2>
+                <p class="text-brand-subtext mt-3 sm:mt-4 text-sm sm:text-base">व्यवसायों, संस्थानों और कंटेंट क्रिएटर्स के लिए संपूर्ण डिजिटल समाधान।</p>
+            </div>
+
+            <!-- Tab Buttons -->
+            <div class="flex flex-wrap justify-center gap-2 mb-8 sm:mb-10" id="services-tabs">
+                <button onclick="openTab('tab-ai')" class="tab-btn active px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-brand-accent text-black transition shadow">AI Services</button>
+                <button onclick="openTab('tab-web')" class="tab-btn px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-brand-card hover:bg-gray-800 text-brand-subtext transition">Web Dev</button>
+                <button onclick="openTab('tab-automation')" class="tab-btn px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-brand-card hover:bg-gray-800 text-brand-subtext transition">Automation</button>
+                <button onclick="openTab('tab-marketing')" class="tab-btn px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-brand-card hover:bg-gray-800 text-brand-subtext transition">Marketing</button>
+                <button onclick="openTab('tab-design')" class="tab-btn px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-brand-card hover:bg-gray-800 text-brand-subtext transition">Design & Video</button>
+            </div>
+
+            <!-- Tab Content 1: AI Services -->
+            <div id="tab-ai" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-solid fa-comments text-3xl text-brand-accent mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">AI Chatbot Development</h3>
+                        <p class="text-sm text-brand-subtext">वेबसाइट और सोशल प्लेटफॉर्म्स के लिए स्मार्ट AI चैटबॉट्स जो ग्राहकों के सवालों के त्वरित जवाब देते हैं।</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-solid fa-user-gear text-3xl text-brand-blue mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">AI Agent Development</h3>
+                        <p class="text-sm text-brand-subtext">बिजनेस प्रक्रियाओं को आसान बनाने के लिए कस्टम AI एजेंट्स जो कंटेंट, रिसर्च और सपोर्ट स्वचालित करते हैं।</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-solid fa-headset text-3xl text-brand-accent mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">Customer Support AI Solutions</h3>
+                        <p class="text-sm text-brand-subtext">24/7 ग्राहक सहायता प्रणाली, AI आधारित FAQs और स्वचालित टिकटिंग समाधान।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content 2: Web Dev -->
+            <div id="tab-web" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-solid fa-globe text-3xl text-brand-blue mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">Business & Portfolio Websites</h3>
+                        <p class="text-sm text-brand-subtext">कंपनियों, कोचिंग संस्थानों, दुकानों और प्रोफेशनल्स के लिए रेस्पॉन्सिव वेबसाइट्स।</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-brands fa-whatsapp text-3xl text-green-500 mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">WhatsApp & AI Integration</h3>
+                        <p class="text-sm text-brand-subtext">वेबसाइट पर WhatsApp बटन और AI चैटबॉट इंटीग्रेशन ताकि डायरेक्ट लीड्स मिल सकें।</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-solid fa-server text-3xl text-brand-accent mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">Domain, Hosting & SSL</h3>
+                        <p class="text-sm text-brand-subtext">डोमेन रजिस्ट्रेशन, सेफ होस्टिंग सेटअप, SSL सर्टिफिकेट्स और नियमित मेंटेनेंस।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content 3: Automation -->
+            <div id="tab-automation" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-solid fa-diagram-project text-3xl text-brand-accent mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">n8n Workflow Automation</h3>
+                        <p class="text-sm text-brand-subtext">अलग-अलग ऐप्स और सर्विसेज के बीच ऑटोमैटिक डेटा ट्रांसमिशन और वर्कफ़्लो।</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-solid fa-envelope-open-text text-3xl text-brand-blue mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">Lead & Notification Workflows</h3>
+                        <p class="text-sm text-brand-subtext">फॉर्म भरने पर तुरंत Email और WhatsApp द्वारा टीम को नोटिफिकेशन भेजना।</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-solid fa-table text-3xl text-green-400 mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">Google Sheets & CRM Setup</h3>
+                        <p class="text-sm text-brand-subtext">लीड कलेक्शन, फॉलो-अप रिमाइंडर और डेटा को व्यवस्थित रखने के स्मार्ट टूल्स।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content 4: Marketing -->
+            <div id="tab-marketing" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-brands fa-google text-3xl text-brand-accent mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">SEO & Search Console</h3>
+                        <p class="text-sm text-brand-subtext">On-Page SEO, Keyword Research और लोकल Google Search में उपस्थिति मजबूत करना।</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-brands fa-youtube text-3xl text-red-500 mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">YouTube Growth & Branding</h3>
+                        <p class="text-sm text-brand-subtext">चैनल सेटअप, SEO टाइटल/डिस्क्रिप्शन, थंबनेल डिजाइन और कंटेंट स्ट्रैटेजी।</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-brands fa-instagram text-3xl text-pink-500 mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">Social Media Management</h3>
+                        <p class="text-sm text-brand-subtext">Facebook, Instagram और LinkedIn हैंडल का नियमित मैनेजमेंट और पोस्ट प्लानिंग।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content 5: Design & Video -->
+            <div id="tab-design" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-solid fa-palette text-3xl text-brand-accent mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">Logo & Graphic Design</h3>
+                        <p class="text-sm text-brand-subtext">ब्रांड आइडेंटिटी, लोगो, विजिटिंग कार्ड, ब्रोशर और सोशल मीडिया पोस्टर्स।</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-solid fa-clapperboard text-3xl text-brand-blue mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">Reels & Video Editing</h3>
+                        <p class="text-sm text-brand-subtext">प्रोफेशनल वीडियो एडिटिंग, AI वॉइसओवर और सबटाइटल्स के साथ Reels & Shorts।</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <i class="fa-solid fa-store text-3xl text-brand-accent mb-4"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">Local Business Digitalization</h3>
+                        <p class="text-sm text-brand-subtext">स्थानीय दुकानों और व्यवसायों को Google Business Profile और ऑनलाइन कैटलॉग से जोड़ना।</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT FORM SECTION -->
+    <section id="contact" class="py-16 sm:py-20 relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card p-6 sm:p-10 md:p-12 rounded-3xl border border-brand-accent/30 relative">
+                <div class="text-center mb-8 sm:mb-10">
+                    <span class="text-brand-accent font-semibold text-sm uppercase tracking-wider">संपर्क करें (Contact Us)</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">अपने प्रोजेक्ट या ट्रेनिंग की शुरुआत करें</h2>
+                    <p class="text-brand-subtext text-xs sm:text-sm mt-2">नीचे दिए गए नंबरों या ईमेल पर सीधा संपर्क करें, या फॉर्म भरें।</p>
+                    
+                    <!-- Direct Clickable Contact Details -->
+                    <div class="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 mt-6 text-xs sm:text-sm">
+                        <a href="tel:8171643770" class="w-full sm:w-auto flex items-center justify-center space-x-2 bg-brand-dark px-4 py-2.5 rounded-xl border border-gray-700 hover:border-brand-accent transition text-brand-subtext hover:text-brand-accent">
+                            <i class="fa-solid fa-phone text-brand-accent"></i>
+                            <span>8171643770</span>
+                        </a>
+                        <a href="https://wa.me/918171643770" target="_blank" rel="noopener" class="w-full sm:w-auto flex items-center justify-center space-x-2 bg-brand-dark px-4 py-2.5 rounded-xl border border-gray-700 hover:border-green-500 transition text-brand-subtext hover:text-green-400">
+                            <i class="fa-brands fa-whatsapp text-green-500 text-lg"></i>
+                            <span>WhatsApp 8171643770</span>
+                        </a>
+                        <a href="tel:9259680648" class="w-full sm:w-auto flex items-center justify-center space-x-2 bg-brand-dark px-4 py-2.5 rounded-xl border border-gray-700 hover:border-brand-accent transition text-brand-subtext hover:text-brand-accent">
+                            <i class="fa-solid fa-phone text-brand-accent"></i>
+                            <span>9259680648</span>
+                        </a>
+                        <a href="https://wa.me/919259680648" target="_blank" rel="noopener" class="w-full sm:w-auto flex items-center justify-center space-x-2 bg-brand-dark px-4 py-2.5 rounded-xl border border-gray-700 hover:border-green-500 transition text-brand-subtext hover:text-green-400">
+                            <i class="fa-brands fa-whatsapp text-green-500 text-lg"></i>
+                            <span>WhatsApp 9259680648</span>
+                        </a>
+                        <a href="mailto:apkaapnanewslive24@gmail.com" class="w-full sm:w-auto flex items-center justify-center space-x-2 bg-brand-dark px-4 py-2.5 rounded-xl border border-gray-700 hover:border-brand-accent transition text-brand-subtext hover:text-brand-accent break-all">
+                            <i class="fa-solid fa-envelope text-brand-accent shrink-0"></i>
+                            <span>apkaapnanewslive24@gmail.com</span>
+                        </a>
+                    </div>
+                </div>
+
+                <form id="contactForm" action="https://formspree.io/f/xeaaagae" method="POST" class="space-y-4 sm:space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                        <div>
+                            <label class="block text-xs font-semibold text-brand-subtext mb-2">आपका नाम (Full Name) *</label>
+                            <input type="text" name="name" required class="w-full bg-brand-dark border border-gray-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-accent transition" placeholder="जैसे: राहुल शर्मा">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-brand-subtext mb-2">व्हाट्सएप / फोन नंबर *</label>
+                            <input type="tel" name="phone" required class="w-full bg-brand-dark border border-gray-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-accent transition" placeholder="9876543210">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                        <div>
+                            <label class="block text-xs font-semibold text-brand-subtext mb-2">ईमेल आईडी (Email)</label>
+                            <input type="email" name="email" class="w-full bg-brand-dark border border-gray-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-accent transition" placeholder="name@example.com">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-brand-subtext mb-2">सेवा / कोर्स चुनें *</label>
+                            <select name="service" required class="w-full bg-brand-dark border border-gray-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-accent transition">
+                                <option value="">चुनिए...</option>
+                                <option value="courses">AI / Digital Skill Courses</option>
+                                <option value="ai">AI Agent & Chatbot Development</option>
+                                <option value="web">Website Design & Development</option>
+                                <option value="automation">n8n Business Automation</option>
+                                <option value="seo">SEO & YouTube Growth</option>
+                                <option value="branding">Graphic Design & Video Editing</option>
+                                <option value="other">अन्य (Other)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-brand-subtext mb-2">आपका संदेश या सवाल</label>
+                        <textarea name="message" rows="4" class="w-full bg-brand-dark border border-gray-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-accent transition" placeholder="अपनी आवश्यकताओं के बारे में विस्तार से बताएं..."></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full btn-gold text-black font-bold py-3.5 sm:py-4 rounded-xl shadow-lg text-center text-sm sm:text-base">
+                        फॉर्म जमा करें (Submit Inquiry)
+                    </button>
+                </form>
+
+                <div id="formSuccess" class="hidden mt-6 p-4 bg-green-900/40 border border-green-500 rounded-xl text-center text-green-300">
+                    <i class="fa-solid fa-circle-check text-2xl mb-1"></i>
+                    <p class="font-bold">धन्यवाद!</p>
+                    <p class="text-xs">आपका संदेश प्राप्त हो गया है। Gyanora Hub टीम जल्द आपसे संपर्क करेगी।</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-dark border-t border-gray-800 py-10 sm:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Col 1 -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-accent to-brand-gold flex items-center justify-center text-black text-lg shadow-lg shrink-0" title="Gyanora Hub">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <span class="text-lg font-bold gold-gradient-text">GYANORA HUB</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-brand-subtext max-w-sm mb-4 leading-relaxed">
+                        ज्ञान से सफलता तक का सफर — शिक्षा, आर्टिफिशियल इंटेलिजेंस और आधुनिक डिजिटल सेवाओं के माध्यम से व्यवसायों और युवाओं का सशक्तिकरण।
+                    </p>
+                    <div class="space-y-2 text-xs sm:text-sm text-brand-subtext">
+                        <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+                            <a href="tel:8171643770" class="flex items-center space-x-2 bg-brand-card px-3 py-2 rounded-lg border border-gray-700 hover:border-brand-accent hover:text-brand-accent transition" title="Call 8171643770">
+                                <i class="fa-solid fa-phone text-brand-accent"></i><span>8171643770</span>
+                            </a>
+                            <a href="https://wa.me/918171643770" target="_blank" rel="noopener" class="flex items-center space-x-2 bg-brand-card px-3 py-2 rounded-lg border border-gray-700 hover:border-green-500 hover:text-green-400 transition" title="WhatsApp 8171643770">
+                                <i class="fa-brands fa-whatsapp text-green-500"></i><span>WhatsApp</span>
+                            </a>
+                            <a href="tel:9259680648" class="flex items-center space-x-2 bg-brand-card px-3 py-2 rounded-lg border border-gray-700 hover:border-brand-accent hover:text-brand-accent transition" title="Call 9259680648">
+                                <i class="fa-solid fa-phone text-brand-accent"></i><span>9259680648</span>
+                            </a>
+                            <a href="https://wa.me/919259680648" target="_blank" rel="noopener" class="flex items-center space-x-2 bg-brand-card px-3 py-2 rounded-lg border border-gray-700 hover:border-green-500 hover:text-green-400 transition" title="WhatsApp 9259680648">
+                                <i class="fa-brands fa-whatsapp text-green-500"></i><span>WhatsApp</span>
+                            </a>
+                            <a href="mailto:apkaapnanewslive24@gmail.com" class="flex items-center space-x-2 bg-brand-card px-3 py-2 rounded-lg border border-gray-700 hover:border-brand-accent hover:text-brand-accent transition break-all" title="Email bhejen">
+                                <i class="fa-solid fa-envelope text-brand-accent"></i><span>apkaapnanewslive24@gmail.com</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Col 2 -->
+                <div>
+                    <h4 class="font-bold text-white mb-4 text-sm">क्विक लिंक्स</h4>
+                    <ul class="space-y-2 text-xs sm:text-sm text-brand-subtext">
+                        <li><a href="#about" class="hover:text-brand-accent">हमारे बारे में</a></li>
+                        <li><a href="#education" class="hover:text-brand-accent">कोर्सेज</a></li>
+                        <li><a href="#services" class="hover:text-brand-accent">डिजिटल सेवाएं</a></li>
+                        <li><a href="#contact" class="hover:text-brand-accent">संपर्क करें</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3 -->
+                <div>
+                    <h4 class="font-bold text-white mb-4 text-sm">सोशल मीडिया</h4>
+                    <div class="flex space-x-3 sm:space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-brand-card flex items-center justify-center text-brand-subtext hover:text-brand-accent hover:border hover:border-brand-accent transition"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-brand-card flex items-center justify-center text-brand-subtext hover:text-brand-accent hover:border hover:border-brand-accent transition"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-brand-card flex items-center justify-center text-brand-subtext hover:text-brand-accent hover:border hover:border-brand-accent transition"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-brand-card flex items-center justify-center text-brand-subtext hover:text-brand-accent hover:border hover:border-brand-accent transition"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 text-center text-xs text-brand-subtext">
+                <p>© Gyanora Hub — ज्ञान से सफलता तक का सफर | सर्वाधिकार सुरक्षित</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Agar logo image missing/broken ho to uski jagah graduation-cap icon dikhao
+        function logoFallback(img, sizeClasses) {
+            img.onerror = null;
+            const icon = document.createElement('div');
+            icon.className = 'rounded-full bg-gradient-to-br from-brand-accent to-brand-gold flex items-center justify-center text-black shadow-lg shrink-0 ' + (sizeClasses || 'w-10 h-10 text-lg');
+            icon.innerHTML = '<i class="fa-solid fa-graduation-cap"></i>';
+            img.replaceWith(icon);
+        }
+
+        function openTab(tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+
+            const buttons = document.querySelectorAll('#services-tabs button');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-brand-accent', 'text-black', 'shadow');
+                btn.classList.add('bg-brand-card', 'text-brand-subtext');
+            });
+
+            document.getElementById(tabId).classList.remove('hidden');
+
+            event.currentTarget.classList.remove('bg-brand-card', 'text-brand-subtext');
+            event.currentTarget.classList.add('bg-brand-accent', 'text-black', 'shadow');
+        }
+
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // ===== ANIMATED PARTICLE BACKGROUND (connected nodes + mouse interaction) =====
+        (function () {
+            const canvas = document.getElementById('bg-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let w, h, particles = [], rafId;
+            const mouse = { x: null, y: null };
+            const LINK_DIST = 130;
+            const MOUSE_DIST = 170;
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            function makeParticle() {
+                return {
+                    x: Math.random() * w,
+                    y: Math.random() * h,
+                    r: Math.random() * 2 + 1,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    color: Math.random() > 0.5 ? '245, 158, 11' : '96, 165, 250',
+                    alpha: Math.random() * 0.5 + 0.2
+                };
+            }
+
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+                const count = Math.min(70, Math.max(25, Math.floor((w * h) / 20000)));
+                particles = Array.from({ length: count }, makeParticle);
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, w, h);
+
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    if (p.x < 0) p.x = w;
+                    if (p.x > w) p.x = 0;
+                    if (p.y < 0) p.y = h;
+                    if (p.y > h) p.y = 0;
+
+                    // Node
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
+                    ctx.fill();
+
+                    // Link nearby nodes
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const q = particles[j];
+                        const dx = p.x - q.x, dy = p.y - q.y;
+                        const dist = Math.hypot(dx, dy);
+                        if (dist < LINK_DIST) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(q.x, q.y);
+                            ctx.strokeStyle = `rgba(245, 158, 11, ${0.14 * (1 - dist / LINK_DIST)})`;
+                            ctx.lineWidth = 0.6;
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Link nodes to the mouse cursor
+                    if (mouse.x !== null) {
+                        const dx = p.x - mouse.x, dy = p.y - mouse.y;
+                        const dist = Math.hypot(dx, dy);
+                        if (dist < MOUSE_DIST) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.strokeStyle = `rgba(251, 191, 36, ${0.3 * (1 - dist / MOUSE_DIST)})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                rafId = requestAnimationFrame(draw);
+            }
+
+            window.addEventListener('resize', resize);
+            window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+            window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+
+            resize();
+            if (reducedMotion) {
+                draw();                       // render one static frame
+                cancelAnimationFrame(rafId);
+            } else {
+                draw();
+            }
+        })();
+
+        // ===== CUSTOM CURSOR (gold dot + smooth ring + sparkle trail) =====
+        (function () {
+            const isTouch = window.matchMedia('(pointer: coarse)').matches;
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (isTouch || reducedMotion) return; // keep the normal cursor on mobile
+
+            document.documentElement.classList.add('custom-cursor');
+
+            const dot = document.createElement('div');
+            dot.className = 'cursor-dot';
+            const ring = document.createElement('div');
+            ring.className = 'cursor-ring';
+            document.body.appendChild(dot);
+            document.body.appendChild(ring);
+
+            let tx = -100, ty = -100;      // target (real mouse position)
+            let rx = -100, ry = -100;      // ring position (smoothed)
+            let lastSx = 0, lastSy = 0;    // last sparkle spawn point
+
+            document.addEventListener('mousemove', e => {
+                tx = e.clientX;
+                ty = e.clientY;
+                dot.style.transform = `translate(${tx}px, ${ty}px) translate(-50%, -50%)`;
+                dot.classList.remove('hidden-c');
+                ring.classList.remove('hidden-c');
+                spawnSparkle(tx, ty);
+            });
+
+            document.addEventListener('mouseleave', () => {
+                dot.classList.add('hidden-c');
+                ring.classList.add('hidden-c');
+            });
+
+            // Grow the ring when hovering interactive elements
+            const HOVER_SEL = 'a, button, input, textarea, select, .glass-card, .tab-btn';
+            document.addEventListener('mouseover', e => {
+                if (e.target.closest(HOVER_SEL)) ring.classList.add('hovering');
+            });
+            document.addEventListener('mouseout', e => {
+                if (e.target.closest(HOVER_SEL)) ring.classList.remove('hovering');
+            });
+
+            // Smooth ring follow
+            (function loop() {
+                rx += (tx - rx) * 0.18;
+                ry += (ty - ry) * 0.18;
+                ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+                requestAnimationFrame(loop);
+            })();
+
+            // Sparkle trail (throttled by distance)
+            function spawnSparkle(x, y) {
+                if (Math.hypot(x - lastSx, y - lastSy) < 22) return;
+                lastSx = x;
+                lastSy = y;
+
+                const s = document.createElement('div');
+                s.className = 'sparkle';
+                const size = 3 + Math.random() * 4;
+                s.style.width = s.style.height = size + 'px';
+                s.style.background = Math.random() > 0.5 ? '#FBBF24' : '#60A5FA';
+                s.style.boxShadow = '0 0 6px rgba(245, 158, 11, 0.8)';
+                s.style.left = x + 'px';
+                s.style.top = y + 'px';
+                document.body.appendChild(s);
+
+                const dx = (Math.random() - 0.5) * 50;
+                const dy = 15 + Math.random() * 35;
+                const anim = s.animate([
+                    { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+                    { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 550 + Math.random() * 400,
+                    easing: 'ease-out'
+                });
+                anim.onfinish = () => s.remove();
+            }
+        })();
+
+        // ===== CONTACT FORM → FORMSPREE (AJAX submit + success message) =====
+        (function () {
+            const form = document.getElementById('contactForm');
+            const successBox = document.getElementById('formSuccess');
+            if (!form) return;
+
+            form.addEventListener('submit', async (e) => {
+                const action = form.getAttribute('action') || '';
+                // Jab tak Formspree form ID set nahi hoti, default behavior rehne do
+                if (!/^https:\/\/formspree\.io\/f\/(?!YOUR_FORM_ID)[A-Za-z0-9]+$/.test(action)) return;
+
+                e.preventDefault();
+                const btn = form.querySelector('button[type="submit"]');
+                const oldHtml = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = 'Bheja ja raha hai... <i class="fa-solid fa-spinner fa-spin ml-2"></i>';
+
+                try {
+                    const res = await fetch(action, {
+                        method: 'POST',
+                        body: new FormData(form),
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    if (res.ok) {
+                        form.reset();
+                        successBox.classList.remove('hidden');
+                        successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else {
+                        alert('Maaf kijiye, form submit nahi ho paya. Dobara try karein.');
+                    }
+                } catch (err) {
+                    alert('Network error: form submit nahi ho paya. Dobara try karein.');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = oldHtml;
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
