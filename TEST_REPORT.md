@@ -53,6 +53,8 @@ Results `test-evidence/test-results.json` mein aur screenshots isi folder mein s
 
 ## 🔗 Direct-open icons ka matrix
 
+> Note: Phone numbers ab **icon-only** hain — click karne par directly dialer/WhatsApp khulta hai, par number UI par nahi dikhta (accessibility ke liye `title`/`aria-label` mein number rakha gaya hai).
+
 | Jagah | Call (tel:) | WhatsApp (wa.me) | Email (mailto:) |
 |-------|-------------|------------------|-----------------|
 | Contact section tiles | ✅ 2 | ✅ 2 | ✅ 1 |
