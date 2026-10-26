@@ -189,9 +189,9 @@ elif menu == "8. CRM & Infrastructure":
 elif menu == "9. संपर्क करें (Contact Us)":
     st.markdown("<h2 class='section-header'>संपर्क करें (Get in Touch)</h2>", unsafe_allow_html=True)
     st.markdown("""
-    **Direct Contact (click karke direct kholein):**
-    - 📞 Call: [8171643770](tel:8171643770) | [9259680648](tel:9259680648)
-    - 💬 WhatsApp: [Chat 8171643770](https://wa.me/918171643770) | [Chat 9259680648](https://wa.me/919259680648)
+    **Direct Contact (icon par click karein — number khud dial hoga, screen par number nahi dikhega):**
+    - 📞 Call: [📞](tel:8171643770 "Call 8171643770") | [📞](tel:9259680648 "Call 9259680648")
+    - 💬 WhatsApp: [💬](https://wa.me/918171643770 "WhatsApp 8171643770") | [💬](https://wa.me/919259680648 "WhatsApp 9259680648")
     - ✉️ Email: [apkaapnanewslive24@gmail.com](mailto:apkaapnanewslive24@gmail.com)
     """)
     
